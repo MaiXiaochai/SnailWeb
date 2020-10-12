@@ -11,9 +11,13 @@ const locale = {
   'message': '-',
   'menu.home': 'Home',
   'menu.dashboard': 'Dashboard',
-  'menu.dashboard.analysis': 'Analysis',
+  'menu.dashboard.analysis': 'History',
   'menu.dashboard.monitor': 'Monitor',
   'menu.dashboard.workplace': 'Workplace',
+
+  // [2020-10-12] 添加菜单项目
+  'menu.jobs': 'Job Settings',
+  'menu.jobs.editor': 'Job Editor',
 
   'layouts.usermenu.dialog.title': 'Message',
   'layouts.usermenu.dialog.content': 'Do you really log-out.',

@@ -10,10 +10,12 @@ const components = {
 const locale = {
   'message': '-',
   'menu.home': '主页',
-  'menu.dashboard': '仪表盘',
-  'menu.dashboard.analysis': '分析页',
-  'menu.dashboard.monitor': '监控页',
-  'menu.dashboard.workplace': '工作台'
+  'menu.dashboard': '任务监控',
+  'menu.dashboard.analysis': '历史统计',
+  'menu.dashboard.monitor': '实时状态',
+  'menu.dashboard.workplace': '任务列表',
+  'menu.jobs': '任务设置',
+  'menu.jobs.editor': '任务编辑'
 }
 
 export default {
