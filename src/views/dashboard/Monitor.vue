@@ -1,6 +1,6 @@
 <template>
   <div>
-    Monitor
+    <h2>实时状态模块</h2>
   </div>
 </template>
 
