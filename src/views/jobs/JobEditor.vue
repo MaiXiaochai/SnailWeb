@@ -61,7 +61,7 @@
             <p>{{ item.startAt }}</p>
           </div>
           <div class="list-content-item">
-            <a-progress :percent="item.progress.value" :status="!item.progress.status ? null : item.progress.status" style="width: 180px"/>
+            <a-progress :percent="item.progress.value" :status="!item.progress.status ? null : item.progress.status"  style="width: 180px"/>
           </div>
         </div>
       </a-list-item>
@@ -74,6 +74,7 @@
   // 演示如何使用 this.$dialog 封装 modal 组件
   import TaskForm from './modules/TaskForm'
   import Info from './components/Info'
+  import { getAllJobs } from '@/api/manage'
 
   const data = []
   data.push({
@@ -127,50 +128,6 @@
       value: 100
     }
   })
-  data.push({
-    title: 'Bootstrap',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-    description: '那时候我只会想自己想要什么，从不想自己拥有什么',
-    owner: '吴加好',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      status: 'exception',
-      value: 100
-    }
-  })
-  data.push({
-    title: 'Bootstrap',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-    description: '那时候我只会想自己想要什么，从不想自己拥有什么',
-    owner: '吴加好',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      status: 'exception',
-      value: 100
-    }
-  })
-  data.push({
-    title: 'Bootstrap',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-    description: '那时候我只会想自己想要什么，从不想自己拥有什么',
-    owner: '吴加好',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      status: 'exception',
-      value: 100
-    }
-  })
-  data.push({
-    title: 'Bootstrap',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-    description: '那时候我只会想自己想要什么，从不想自己拥有什么',
-    owner: '吴加好',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      status: 'exception',
-      value: 100
-    }
-  })
 
   export default {
     name: 'JobEditor',
@@ -181,11 +138,18 @@
     data () {
       return {
         data,
+        result: Object,
         status: 'all'
       }
     },
+    created () {
+      getAllJobs().then(res => {
+        this.result = res
+      })
+    },
     methods: {
       add () {
+        console.log(this.result.data)
         this.$dialog(TaskForm,
           // component props
           {

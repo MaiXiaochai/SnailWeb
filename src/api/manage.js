@@ -6,7 +6,9 @@ const api = {
   service: '/service',
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
-  orgTree: '/org/tree'
+  orgTree: '/org/tree',
+  // [2020-10-14] 调度任务api
+  allJobs: '/jobs/all'
 }
 
 export default api
@@ -66,5 +68,13 @@ export function saveSub (sub) {
     url: '/sub',
     method: sub.id === 0 ? 'post' : 'put',
     data: sub
+  })
+}
+
+// [2020-10-14] 调度任务相关请求
+export function getAllJobs () {
+  return request({
+    url: api.allJobs,
+    method: 'get'
   })
 }
