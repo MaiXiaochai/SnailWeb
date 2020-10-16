@@ -17,6 +17,7 @@
   <a-card
     style="margin-top: 0"
     :bordered="false"
+    size="small"
     title="任务编辑">
 
     <div slot="extra">
@@ -29,14 +30,14 @@
     </div>
 
     <div class="operate">
-      <a-button type="dashed" style="width: 100%" icon="plus" @click="add">添加任务</a-button>
+      <a-button type="primary" style="width: 100%" icon="plus" @click="add" ghost>添加任务</a-button>
     </div>
 
-    <a-list size="small" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 5, total: 50}">
+    <!--<a-list size="small" :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 5, total: 50}">
       <a-list-item :key="index" v-for="(item, index) in data">
-        <a-list-item-meta :description="item.description">
-          <a slot="title">{{ item.title }}</a>
-        </a-list-item-meta>
+&lt;!&ndash;        <a-list-item-meta :description="item.comment">&ndash;&gt;
+&lt;!&ndash;          <a slot="title">{{ item.jobName }}</a>&ndash;&gt;
+&lt;!&ndash;        </a-list-item-meta>&ndash;&gt;
         <div slot="actions">
           <a @click="edit(item)">编辑</a>
         </div>
@@ -53,19 +54,39 @@
         </div>
         <div class="list-content">
           <div class="list-content-item">
-            <span>需求人</span>
-            <p>{{ item.owner }}</p>
+            <span>任务名称</span>
+            <p>{{ item.jobName }}</p>
           </div>
           <div class="list-content-item">
-            <span>运行时间</span>
-            <p>{{ item.startAt }}</p>
+            <span>任务类型</span>
+            <p>{{ item.jobType }}</p>
           </div>
           <div class="list-content-item">
-            <a-progress :percent="item.progress.value" :status="!item.progress.status ? null : item.progress.status"  style="width: 180px"/>
+            <span>任务内容</span>
+            <p>{{ item.jobCmd }}</p>
           </div>
+          <div class="list-content-item">
+            <span>时间风格</span>
+            <p>{{ item.timeStyle }}</p>
+          </div>
+          <div class="list-content-item">
+            <span>时间内容</span>
+            <p>{{ item.timeData }}</p>
+          </div>
+          <div class="list-content-item">
+            <span>下次运行时间</span>
+            <p>{{ item.nextRunTime }}</p>
+          </div>
+          <div class="list-content-item">
+            <span>所属业务</span>
+            <p>{{ item.category }}</p>
+          </div>
+          &lt;!&ndash;          <div class="list-content-item">&ndash;&gt;
+          &lt;!&ndash;            <a-progress :percent="item.progress.value" :status="!item.progress.status ? null : item.progress.status" style="width: 180px"/>&ndash;&gt;
+          &lt;!&ndash;          </div>&ndash;&gt;
         </div>
       </a-list-item>
-    </a-list>
+    </a-list>-->
   </a-card>
   <!--  </page-header-wrapper>-->
 </template>
@@ -76,59 +97,6 @@
   import Info from './components/Info'
   import { getAllJobs } from '@/api/manage'
 
-  const data = []
-  data.push({
-    title: 'Alipay',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/WdGqmHpayyMjiEhcKoVE.png',
-    description: '那是一种内在的东西， 他们到达不了，也无法触及的',
-    owner: '付晓晓',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      value: 90
-    }
-  })
-  data.push({
-    title: 'Angular',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png',
-    description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
-    owner: '曲丽丽',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      value: 54
-    }
-  })
-  data.push({
-    title: 'Ant Design',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png',
-    description: '生命就像一盒巧克力，结果往往出人意料',
-    owner: '林东东',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      value: 66
-    }
-  })
-  data.push({
-    title: 'Ant Design Pro',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png',
-    description: '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
-    owner: '周星星',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      value: 30
-    }
-  })
-  data.push({
-    title: 'Bootstrap',
-    avatar: 'https://gw.alipayobjects.com/zos/rmsportal/siCrBXXhmvTQGWPNLBow.png',
-    description: '那时候我只会想自己想要什么，从不想自己拥有什么',
-    owner: '吴加好',
-    startAt: '2018-07-26 22:44',
-    progress: {
-      status: 'exception',
-      value: 100
-    }
-  })
-
   export default {
     name: 'JobEditor',
     components: {
@@ -137,19 +105,19 @@
     },
     data () {
       return {
-        data,
-        result: Object,
+        data: [],
         status: 'all'
       }
     },
-    created () {
+    mounted () {
       getAllJobs().then(res => {
-        this.result = res
+        this.data = res.data
       })
     },
     methods: {
       add () {
-        console.log(this.result.data)
+        console.log(typeof this.result)
+        console.log(this.result)
         this.$dialog(TaskForm,
           // component props
           {
@@ -205,12 +173,6 @@
 </script>
 
 <style lang="less" scoped>
-  .ant-avatar-lg {
-    width: 48px;
-    height: 48px;
-    line-height: 48px;
-  }
-
   .list-content-item {
     color: rgba(0, 0, 0, .45);
     display: inline-block;
@@ -220,12 +182,15 @@
 
     span {
       line-height: 20px;
+      font-size: 8px;
     }
 
     p {
       margin-top: 4px;
       margin-bottom: 0;
       line-height: 22px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+      color: rgba(0, 0, 0, 1);
     }
   }
 </style>
