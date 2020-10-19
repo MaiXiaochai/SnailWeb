@@ -45,11 +45,9 @@
 </template>
 
 <script>
-import { STable } from '@/components'
 
 export default {
   components: {
-    STable
   },
   data () {
     return {
