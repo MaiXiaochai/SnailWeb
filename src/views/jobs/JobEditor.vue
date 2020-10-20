@@ -18,20 +18,41 @@
       <a-button type="primary" style="width: 100%" icon="plus" @click="add" ghost>添加任务</a-button>
     </div>
 
-    <a-table :data-source="data">
+    <a-table :data-source="data" size="middle">
       <a-table-column key="jobName" title="任务名称" data-index="jobName"/>
-      <a-table-column key="jobType" title="任务类型" data-index="jobType"/>
-      <a-table-column key="jobCmd" title="任务内容" data-index="jobCmd"/>
+
+      <!----------------------[ 任务类型: jobType ]---------------------->
+      <a-table-column key="jobType" title="任务类型" data-index="jobType">
+        <template v-slot="jobType">
+          <span class="tag-content">
+            <a-tag :color="`${jobType === 'script' ? 'purple': 'blue'}`">
+              {{ jobType }}
+            </a-tag>
+          </span>
+        </template>
+      </a-table-column>
+
+      <!----------------------[ 任务内容: jobCmd ]---------------------->
+      <a-table-column key="jobCmd" title="任务内容" data-index="jobCmd">
+        <template v-slot="jobCmd">
+          <span class="tag-content">
+            <a-tag color="blue">
+              {{ jobCmd }}
+            </a-tag>
+          </span>
+        </template>
+      </a-table-column>
+
       <a-table-column key="timeStyle" title="时间类型" data-index="timeStyle"/>
-      <a-table-column key="timeData" title="时间内容" data-index="timeData"/>
+      <a-table-column key="timeData" title="时间计划" data-index="timeData"/>
 
       <a-table-column key="nextRunTime" title="下次运行时间" data-index="nextRunTime"/>
-      <a-table-column key="file" title="脚本名称" data-index="file"/>
+      <a-table-column key="file" title="脚本" data-index="file"/>
 
       <a-table-column key="action" title="操作">
-        <template v-slot="{ text }">
-          <span slot="actions">
-            <a @click="edit(item)">编辑</a>
+        <template v-slot="record">
+          <span>
+            <a @click="edit(record)">编辑</a>
           </span>
           <a-divider type="vertical"/>
           <a-dropdown :trigger="['click']">
@@ -39,8 +60,7 @@
               <a-menu-item><a>运行</a></a-menu-item>
               <a-menu-item><a>删除</a></a-menu-item>
             </a-menu>
-            <a>更多
-              <a-icon type="down"/>
+            <a>更多<a-icon type="down"/>
             </a>
           </a-dropdown>
         </template>
@@ -50,17 +70,21 @@
         <tr>
           <td><b>[ 所属业务 ]: </b></td>
           <td>
-            <a-tag color="blue">
-              {{record.category}}
-            </a-tag>
+            <span>
+              <a-tag color="green">
+                {{ record.category }}
+              </a-tag>
+            </span>
           </td>
         </tr>
         <tr>
-          <td><b>[ 任务注释 ]: </b></td>
+          <td><b>[ 任务说明 ]: </b></td>
           <td>
-            <a-tag color="blue">
-              {{record.comment}}
-            </a-tag>
+            <span>
+              <a-tag color="green">
+                {{ record.comment }}
+              </a-tag>
+            </span>
           </td>
         </tr>
       </template>
@@ -89,14 +113,22 @@
       }
     },
     mounted () {
-      getAllJobs().then(res => {
-        this.data = res.data
-      })
+      this.reqData()
     },
     methods: {
+      // 一个公共的请求后台所有任务的方法
+      reqData () {
+        getAllJobs().then(res => {
+          this.data = res.data
+        })
+      },
+      // 获取索引
+      getIndex (record, index) {
+        console.log(index)
+        return index
+      },
       add () {
-        console.log(typeof this.result)
-        console.log(this.result)
+        console.log(this.data)
         this.$dialog(TaskForm,
           // component props
           {
@@ -122,6 +154,7 @@
           })
       },
       edit (record) {
+        console.log('Type of record', typeof record)
         console.log('record', record)
         this.$dialog(TaskForm,
           // component props
@@ -141,7 +174,7 @@
           },
           // modal props
           {
-            title: '操作',
+            title: '编辑任务',
             width: 700,
             centered: true,
             maskClosable: false
@@ -163,10 +196,9 @@
       line-height: 20px;
       font-size: 8px;
     }
-
-    .columns-style {
-      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
-      color: rgba(0, 0, 0, 1);
-    }
+  }
+  .tag-content {
+    font-family: "Lucida Sans Unicode",serif;
+    color: rgba(0, 0, 0, 1);
   }
 </style>
