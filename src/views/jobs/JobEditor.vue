@@ -18,11 +18,12 @@
       <a-button type="primary" style="width: 100%" icon="plus" @click="add" ghost>添加任务</a-button>
     </div>
 
-    <a-table :data-source="data" size="middle">
+    <a-table :data-source="data" size="small">
+      <!----------------------[ 任务名称: jobName ]---------------------->
       <a-table-column key="jobName" title="任务名称" data-index="jobName"/>
 
-      <!----------------------[ 任务类型: jobType ]---------------------->
-      <a-table-column key="jobType" title="任务类型" data-index="jobType">
+      <!----------------------[ 命令类型: jobType ]---------------------->
+      <a-table-column key="jobType" title="命令类型" data-index="jobType">
         <template v-slot="jobType">
           <span class="tag-content">
             <a-tag :color="`${jobType === 'script' ? 'purple': 'blue'}`">
@@ -32,8 +33,8 @@
         </template>
       </a-table-column>
 
-      <!----------------------[ 任务内容: jobCmd ]---------------------->
-      <a-table-column key="jobCmd" title="任务内容" data-index="jobCmd">
+      <!----------------------[ 命令内容: jobCmd ]---------------------->
+      <a-table-column key="jobCmd" title="命令内容" data-index="jobCmd">
         <template v-slot="jobCmd">
           <span class="tag-content">
             <a-tag color="blue">
@@ -43,12 +44,35 @@
         </template>
       </a-table-column>
 
-      <a-table-column key="timeStyle" title="时间类型" data-index="timeStyle"/>
-      <a-table-column key="timeData" title="时间计划" data-index="timeData"/>
+      <!----------------------[ 时间风格: timeStyle ]---------------------->
+      <a-table-column key="timeStyle" title="时间风格" data-index="timeStyle"/>
 
+      <!----------------------[ 时间内容: timeData ]---------------------->
+      <a-table-column key="timeData" title="时间内容" data-index="timeData">
+        <template v-slot="timeData">
+          <span class="tag-content">
+            <a-tag color="blue">
+              {{ timeData }}
+            </a-tag>
+          </span>
+        </template>
+      </a-table-column>
+
+      <!----------------------[ 脚本: file ]---------------------->
+      <a-table-column key="file" title="脚本" data-index="file">
+        <template v-slot="file">
+          <span class="tag-content">
+            <a-tag :color="`${file ? 'purple': 'blue'}`">
+              {{ file }}
+            </a-tag>
+          </span>
+        </template>
+      </a-table-column>
+
+      <!---------------[ 下次运行时间: nextRunTime ]----------------->
       <a-table-column key="nextRunTime" title="下次运行时间" data-index="nextRunTime"/>
-      <a-table-column key="file" title="脚本" data-index="file"/>
 
+      <!----------------------[ 操作：action ]---------------------->
       <a-table-column key="action" title="操作">
         <template v-slot="record">
           <span>
@@ -60,31 +84,87 @@
               <a-menu-item><a>运行</a></a-menu-item>
               <a-menu-item><a>删除</a></a-menu-item>
             </a-menu>
-            <a>更多<a-icon type="down"/>
+            <a>更多
+              <a-icon type="down"/>
             </a>
           </a-dropdown>
         </template>
       </a-table-column>
 
+      <!----------------------[ 折叠内容 ]---------------------->
       <template #expandedRowRender="record">
+        <!---------------[ 所属类别: category ]---------------->
         <tr>
-          <td><b>[ 所属业务 ]: </b></td>
           <td>
-            <span>
-              <a-tag color="green">
-                {{ record.category }}
-              </a-tag>
-            </span>
+            <a-tag>
+              <span><b>任务分类</b></span>
+            </a-tag>
+            <span>:</span>
+          </td>
+          <td>
+            <a-tag color="blue">
+              <span>{{ record.category }}</span>
+            </a-tag>
           </td>
         </tr>
+
+        <!---------------[ 任务来源: createdBy ]---------------->
         <tr>
-          <td><b>[ 任务说明 ]: </b></td>
           <td>
-            <span>
-              <a-tag color="green">
-                {{ record.comment }}
-              </a-tag>
-            </span>
+            <a-tag>
+              <span><b>任务来源</b></span>
+            </a-tag>
+            <span>:</span>
+          </td>
+          <td>
+            <a-tag color="blue">
+              <span>{{ record.createdBy }}</span>
+            </a-tag>
+          </td>
+        </tr>
+
+        <!---------------[ 创建时间: createdOn ]---------------->
+        <tr>
+          <td>
+            <a-tag>
+              <span><b>创建时间</b></span>
+            </a-tag>
+            <span>:</span>
+          </td>
+          <td>
+            <a-tag color="blue">
+              <span>{{ record.createdOn }}</span>
+            </a-tag>
+          </td>
+        </tr>
+
+        <!---------------[ 更新时间: updatedOn ]---------------->
+        <tr>
+          <td>
+            <a-tag>
+              <span><b>更新时间</b></span>
+            </a-tag>
+            <span>:</span>
+          </td>
+          <td>
+            <a-tag color="blue">
+              <span>{{ record.updatedOn }}</span>
+            </a-tag>
+          </td>
+        </tr>
+
+        <!---------------[ 任务描述: comment ]---------------->
+        <tr>
+          <td>
+            <a-tag>
+              <span><b>任务描述</b></span>
+            </a-tag>
+            <span>:</span>
+          </td>
+          <td>
+            <a-tag color="blue">
+              <span>{{ record.comment }}</span>
+            </a-tag>
           </td>
         </tr>
       </template>
@@ -122,11 +202,13 @@
           this.data = res.data
         })
       },
+
       // 获取索引
       getIndex (record, index) {
         console.log(index)
         return index
       },
+
       add () {
         console.log(this.data)
         this.$dialog(TaskForm,
@@ -194,11 +276,12 @@
 
     span {
       line-height: 20px;
-      font-size: 8px;
+      font-size: 10px;
     }
   }
+
   .tag-content {
-    font-family: "Lucida Sans Unicode",serif;
+    font-family: "Lucida Sans Unicode", serif;
     color: rgba(0, 0, 0, 1);
   }
 </style>
